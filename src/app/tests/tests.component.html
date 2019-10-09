@@ -1,0 +1,91 @@
+<div class="grid-container">
+  <h1 class="mat-h1">Home sweet home</h1>
+
+  <div class="spacer">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Id to get" #docId>
+    </mat-form-field>
+    <button mat-flat-button color="accent" (click)="getDbRecordById(docId.value)">Get doc by ID</button>
+
+    <ng-container *ngIf="result">
+      <h2 mat-h2>Found</h2>
+      <pre>{{result | json}}</pre>
+    </ng-container>
+  </div>
+
+
+  <div class="spacer">
+    <mat-form-field>
+      <mat-label>Document to insert</mat-label>
+      <textarea matInput
+                #insDoc
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="15"></textarea>
+    </mat-form-field>
+    <button mat-flat-button color="primary" (click)="insertDoc(insDoc.value)">Insert document</button>
+  </div>
+  <br>
+  <br>
+  <mat-form-field>
+    <mat-label>Report type</mat-label>
+    <mat-select #typeReport value="manual">
+      <mat-option value="manual">Manual</mat-option>
+      <mat-option value="diensten">diensten</mat-option>
+      <mat-option value="combined">combined</mat-option>
+      <mat-option value="beheer">beheer</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-flat-button color="accent" (click)="getDocByReportType(typeReport.value)">Get report by type</button>
+  <br>
+  <br>
+  <br>
+  <br>
+  <button mat-flat-button color="primary" (click)="insertRepportsInDb()">insert Repports In Db</button>
+  <button mat-flat-button color="accent" (click)="getAllRecors()">Get all data</button>
+  <button mat-flat-button color="warn" [matMenuTriggerFor]="clearDb">Clear database</button>
+  <mat-menu #clearDb="matMenu">
+    <button mat-menu-item (click)="removeAllRecors()">
+      <i class="material-icons" style="vertical-align: middle">delete</i>
+      <span>Clear Database</span></button>
+    <button mat-menu-item>Cancel</button>
+  </mat-menu>
+  <br>
+  <br>
+  <br>
+  <br>
+  <button mat-flat-button color="accent" (click)="openFileManager()">Open file manager</button>
+  <br>
+  <br>
+  <br>
+  <br>
+  <button mat-flat-button color="accent" (click)="openNgWindow()">Open NG window</button>
+  <button mat-flat-button color="primary" (click)="openFramelessWindow()">Open framless</button>
+  <br>
+  <br>
+  <button mat-flat-button (click)="getAllSettings()">Clog all settings</button>
+  <button mat-flat-button color="warn" (click)="deleteAllSettings()">Delete all settings</button>
+  <br>
+  <br>
+  <br>
+  <br>
+  <div class="form-group">
+    <input type="file" id="file" multiple (change)="processFiles($event)">
+  </div>
+  <br>
+  <br>
+  <p>
+    Open external link: <a href="http://new-identity.eu" (click)="openExternalLink($event)">http://new-identity.eu</a>
+  </p>
+  <br>
+  <br>
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Notification title" #noteTitle>
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Notification body" #noteBody>
+  </mat-form-field>
+  <button mat-flat-button color="accent" (click)="showNotification(noteTitle.value, noteBody.value)">Show Desktop Notification</button>
+
+
+</div>

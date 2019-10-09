@@ -1,0 +1,118 @@
+
+  <div class="flex-container">
+    <mat-form-field class="flex-item">
+      <input type="text" matInput placeholder="Type to filter" (keyup)="updateFilter($event)">
+    </mat-form-field>
+    <h2 *ngIf="reportDate" class="flex-item mat-h2">Report generated <span>{{reportDate | amLocal | amTimeAgo}}</span></h2>
+<!--    <button mat-stroked-button-->
+<!--            [disabled]="!reportDate"-->
+<!--            [matTooltip]="'Lats generated ' + (reportDate | amDateFormat: 'YYYY-MM-DD HH:mm')"-->
+<!--            (click)="generateReport()"-->
+<!--            class="flex-item">Generate new report</button>-->
+  </div>
+
+  <ngx-datatable
+    class="material"
+    [rows]="rows"
+    [loadingIndicator]="!(!!rows.length)"
+    [columnMode]="'force'"
+    [headerHeight]="50"
+    [footerHeight]="50"
+    [rowHeight]="'auto'"
+    [reorderable]="reorderable"
+    [limit]="15">
+
+        <ngx-datatable-column prop="useCase">
+          <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+            <a *ngIf="value"
+               [matTooltip]="row.useCaseDescription"
+               href="https://jira.ictu-sd.nl/jira/browse/{{value}}"
+               target="_blank">{{value}}</a>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="ltcKey">
+          <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+             <a *ngIf="value" [matTooltip]="row.ltcSummary"
+                href="https://jira.ictu-sd.nl/jira/browse/{{value}}"
+                target="_blank">{{value}}</a>
+          </ng-template>
+        </ngx-datatable-column>
+
+
+        <ngx-datatable-column prop="testName">
+          <ng-template let-value="value" ngx-datatable-cell-template>{{value}}</ng-template>
+        </ngx-datatable-column>
+
+
+
+        <ngx-datatable-column prop="testType"
+                              [width]="80"
+                              [resizeable]="false"
+                              [canAutoResize]="false">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <i class="material-icons"
+               [matTooltip]="'Tested ' + value"
+               *ngIf="value == 'automatic'">computer</i>
+            <i class="material-icons"
+               [matTooltip]="'Tested ' + value"
+               *ngIf="value == 'manual'">person</i>
+            <i class="material-icons warning"
+               *ngIf="value != 'manual' && value != 'automatic'"
+               [matTooltip]="'Test type missing'">warning</i>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="executionDate" name="Test result">
+          <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+            <span [matTooltip]="row.result ?
+            'Success ' + (value | amLocal | amDateFormat: 'YYYY-MM-DD HH:mm'):
+            'Failure ' + (value | amLocal | amDateFormat: 'YYYY-MM-DD HH:mm')">
+
+              <i class="material-icons" [ngClass]="{'success': row.result, 'error': !row.result}">
+                  {{row.result ? 'check_circle_outline' : 'error_outline'}}
+              </i>&nbsp;&nbsp;
+
+              <span>{{value | amLocal | amDateFormat: 'YYYY-MM-DD HH:mm'}}</span>
+
+            </span>
+          </ng-template>
+        </ngx-datatable-column>
+
+
+    <!-- Row Detail Template -->
+        <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow (toggle)="onDetailToggle($event)">
+          <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+            <h3 class="mat-h3">LTC details</h3>
+
+            <p><span class="condition">given</span>: {{row.ltcRecipe.given}}</p>
+            <p><span class="condition">when</span>: {{row.ltcRecipe.when}}</p>
+            <p><span class="condition">then</span>: {{row.ltcRecipe.then}}</p>
+
+            <hr class="centered">
+
+            <p *ngIf="row.useCaseDescription"> <span>Use Case Description {{row.useCase}}</span>: <span>{{row.useCaseDescription}}</span></p>
+            <p *ngIf="row.ltcSummary"> <span>LTC Summary {{row.ltcKey}}</span>: <span>{{row.ltcSummary}}</span></p>
+
+          </ng-template>
+        </ngx-datatable-row-detail>
+
+
+    <!-- Column Templates -->
+         <ngx-datatable-column
+           [width]="80"
+           [resizeable]="false"
+           [sortable]="false"
+           [draggable]="false"
+           [canAutoResize]="false">
+
+          <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+             <button mat-icon-button
+                     title="Expand/Collapse Row"
+                     [class.datatable-icon-down]="!expanded"
+                     [class.datatable-icon-up]="expanded"
+                     (click)="toggleExpandRow(row)"></button>
+          </ng-template>
+        </ngx-datatable-column>
+
+  </ngx-datatable>

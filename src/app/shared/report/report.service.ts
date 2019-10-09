@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import all from './reports-data/all.json';
-import beheer from './reports-data/beheer.json';
-import diensten from './reports-data/diensten.json';
-import manual from './reports-data/manual.json';
 
+import all from '../../../assets/reports-data/combined.json';
+import beheer from '../../../assets/reports-data/beheer.json';
+import diensten from '../../../assets/reports-data/diensten.json';
+import manual from '../../../assets/reports-data/manual.json';
 
 @Injectable({
   providedIn: 'root'

@@ -4,9 +4,10 @@ import {ElectronService} from '../shared/electron.service';
 import {WindowService} from '../shared/window.service';
 import {Subject} from 'rxjs';
 import {first} from 'rxjs/operators';
+import {FileUtilsService} from '../shared/file-utils.service';
 
 
-import * as allData from '../../assets/reports-data/all.json';
+import * as allData from '../../assets/reports-data/combined.json';
 import * as beheerData from '../../assets/reports-data/beheer.json';
 import * as dienstenData from '../../assets/reports-data/diensten.json';
 import * as manualData from '../../assets/reports-data/manual.json';
@@ -29,6 +30,7 @@ export class TestsComponent implements OnDestroy {
 
   constructor(private dbSvc: DbService,
               private winSvc: WindowService,
+              private fileSvc: FileUtilsService,
               public elSvc: ElectronService) {
   }
 
@@ -60,12 +62,13 @@ export class TestsComponent implements OnDestroy {
         });
   }
 
-  getDocByReportType(reportType) {
+  downloadDocByReportType(reportType) {
     this.dbSvc.getDocByReportType(reportType)
         .pipe(first())
         .subscribe(docs => {
-          console.log(docs);
           this.allDocsByType = docs;
+          // this.fileSvc.saveJsonFile(`src/assets/reports-data/${reportType}.json`, docs);
+          this.fileSvc.downloadFile(this.allDocsByType, `${reportType}.json`);
         });
   }
 
@@ -80,13 +83,13 @@ export class TestsComponent implements OnDestroy {
   }
 
   insertRepportsInDb() {
-    const combined = (<any>allData).report.map((row) => Object.assign({}, row, {reportType: 'combined'}));
+    const combined = (<any>allData).default.map((row) => Object.assign({}, row, {reportType: 'combined'}));
 
-    const beheer = (<any>beheerData).report.map((row) => Object.assign({}, row, {reportType: 'beheer'}));
+    const beheer = (<any>beheerData).default.map((row) => Object.assign({}, row, {reportType: 'beheer'}));
 
-    const diensten = (<any>dienstenData).report.map((row) => Object.assign({}, row, {reportType: 'diensten'}));
+    const diensten = (<any>dienstenData).default.map((row) => Object.assign({}, row, {reportType: 'diensten'}));
 
-    const manual = (<any>manualData).report.map((row) => Object.assign({}, row, {reportType: 'manual'}));
+    const manual = (<any>manualData).default.map((row) => Object.assign({}, row, {reportType: 'manual'}));
 
     const allArr = [combined, beheer, diensten, manual];
 
@@ -97,7 +100,7 @@ export class TestsComponent implements OnDestroy {
   }
 
   openFileManager() {
-    this.elSvc.openFileManager();
+    this.fileSvc.openFileManager();
   }
 
   openExternalLink($event) {
@@ -106,7 +109,6 @@ export class TestsComponent implements OnDestroy {
   }
 
   showNotification(title: string, body: string) {
-    console.log('show notification');
     const note = {
       title: title || 'This is the title of the Notification',
       body: body || 'Here comes the lil bit longer text with explanation about the situation'

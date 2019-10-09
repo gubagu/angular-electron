@@ -57,6 +57,7 @@ export class ElectronService {
   fs: typeof fs;
   path: typeof path;
   devMode: boolean;
+  app: any;
 
   constructor() {
     // Conditional imports
@@ -64,6 +65,7 @@ export class ElectronService {
       this.ipcRenderer = window.require('electron').ipcRenderer;
       this.webFrame = window.require('electron').webFrame;
       this.remote = window.require('electron').remote;
+      this.app = remote.app;
       this.shell = window.require('electron').shell;
       this.clipboard = window.require('electron').clipboard;
       this.ipcMain = window.require('electron').ipcMain;
@@ -82,14 +84,6 @@ export class ElectronService {
 
   isElectron() {
     return window && window.process && window.process.type;
-  }
-
-  getDirectoryFiles(directory = '/') {
-    return this.fs.readdirSync(directory);
-  }
-
-  openFileManager() {
-    this.shell.showItemInFolder(this.os.homedir());
   }
 
   openExternalLink(externalUrl: string) {

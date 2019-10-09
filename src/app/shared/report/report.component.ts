@@ -39,6 +39,7 @@ export class ReportComponent implements OnInit, OnDestroy {
     // this.rows = data.report;
     // this.reportDate = data.reportDate;
     console.log('getting report type ' + this.report + ' from nedb');
+    console.log(this.report);
     this.dbSvc.getDocByReportType(this.report).pipe(first())
       .subscribe(docs => {
         this.temp = [...docs];

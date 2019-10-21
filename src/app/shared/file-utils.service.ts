@@ -56,7 +56,6 @@ export class FileUtilsService extends ElectronService {
   saveJsonFile(destination: string, jsonObj) {
     try {
       const path = this.path.join(this.app.getAppPath(), destination);
-      console.log();
       this.fs.writeFileSync(path, JSON.stringify(jsonObj));
       return true;
     } catch (e) {

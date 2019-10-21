@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as url from 'url';
 
 import {PdfUtils} from './main/utils-pdf';
-import {FileUtils} from './main/utils-files';
+
 import appConfig from 'electron-settings';
 
 let mainAppWindow, serve;
@@ -26,7 +26,7 @@ function createMainWindow() {
   };
 
   PdfUtils.registerPdfEvents();
-  FileUtils.registerFileEvents();
+
 
   // Create the browser window.
   mainAppWindow = new BrowserWindow(windowOptions);
